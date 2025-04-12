@@ -63,6 +63,8 @@ if page == "Exploratory Data Analysis":
     fig = px.bar(month_count, x='Month', y='Count', title="Contact Month Distribution")
     st.plotly_chart(fig)
 
+    data['subscribed'] = data['subscribed'].astype(str).str.lower().str.strip()
+    
     # 5. Subscription by Education
     st.subheader("Subscription Rate by Education Level")
     edu_group = data.groupby('education')['subscribed'].value_counts(normalize=True).unstack().fillna(0)
