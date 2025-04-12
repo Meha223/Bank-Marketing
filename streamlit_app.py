@@ -19,6 +19,13 @@ def load_data():
             .merge(contact, on="fact_id", how="left")
             .merge(campaign, on="fact_id", how="left")
     )
+    
+    # Standardize 'subscribed' labels
+    if df['subscribed'].dtype == 'int' or set(df['subscribed'].unique()) <= {0, 1}:
+        df['subscribed_label'] = df['subscribed'].map({1: 'Subscribed', 0: 'Not Subscribed'})
+    else:
+        df['subscribed_label'] = df['subscribed'].astype(str).str.capitalize()
+    
     return df
 
 data = load_data()
@@ -57,24 +64,12 @@ if page == "Exploratory Data Analysis":
     st.plotly_chart(fig)
 
     # 4: Subscription Rate by Job
-    # Check values in 'subscribed'
-if data['subscribed'].dtype == 'int' or set(data['subscribed'].unique()) <= {0, 1}:
-    # Assuming binary 0/1
-    data['subscribed_label'] = data['subscribed'].map({1: 'Subscribed', 0: 'Not Subscribed'})
-else:
-    # Assuming it's already 'yes'/'no' or similar
-    data['subscribed_label'] = data['subscribed'].astype(str).str.capitalize()
-
-subscription_by_job = data.groupby(['job', 'subscribed_label']).size().reset_index(name='Count')
-fig = px.bar(
-    subscription_by_job,
-    x='job',
-    y='Count',
-    color='subscribed_label',
-    title="Subscription Rate by Job",
-    labels={'subscribed_label': 'Subscription Status'}
-)
-st.plotly_chart(fig)
+    st.subheader("💼 Subscription Rate by Job")
+    job_subs = data.groupby(['job', 'subscribed_label']).size().reset_index(name='Count')
+    fig = px.bar(job_subs, x='job', y='Count', color='subscribed_label',
+                 title="Subscription Rate by Job", labels={'subscribed_label': 'Subscription'})
+    fig.update_layout(xaxis_tickangle=-45)
+    st.plotly_chart(fig)
 
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
