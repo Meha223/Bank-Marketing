@@ -127,50 +127,6 @@ if page == "Exploratory Data Analysis":
         labels={'job': 'Job', 'Subscription Rate (%)': 'Subscription Rate (%)'}
     )
     st.plotly_chart(fig)
-
-    # 8. Subscription Rate by Month
-    st.subheader("Subscription Rate by Month")
-
-    # Ensure 'subscribed' is boolean
-    data['subscribed'] = data['subscribed'].astype(bool)
-
-    # Clean month column (ensure no whitespace or invalid characters)
-    data['month'] = data['month'].str.strip().astype(str)
-
-    # Check if there are any missing or invalid values in 'month' and 'subscribed'
-    if data['month'].isnull().any():
-        st.warning("There are missing values in the 'month' column.")
-
-    if data['subscribed'].isnull().any():
-        st.warning("There are missing values in the 'subscribed' column.")
-
-    # Ensure there are no invalid month values (e.g., non-existent months)
-    valid_months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
-    data = data[data['month'].isin(valid_months)]  # Keep only valid months
-
-    # Group by month and calculate the subscription rate (mean of 'subscribed' column)
-    month_group = data.groupby('month')['subscribed'].mean().reset_index()
-
-    # Calculate subscription rate as percentage
-    month_group["Subscription Rate (%)"] = month_group["subscribed"] * 100
-
-    # Ensure the month values are ordered correctly in the bar chart (from jan to dec)
-    month_order = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
-    month_group['month'] = pd.Categorical(month_group['month'], categories=month_order, ordered=True)
-
-    # Create a bar chart for subscription rate by month
-    fig = px.bar(
-        month_group,
-        x='month',
-        y='Subscription Rate (%)',
-        title='Subscription Rate by Month',
-        labels={'month': 'Month', 'Subscription Rate (%)': 'Subscription Rate (%)'},
-        color='month',  # Color the bars based on the month
-        category_orders={'month': month_order}  # Ensure months are ordered correctly
-    )
-
-    # Show the plot
-    st.plotly_chart(fig)
     
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
