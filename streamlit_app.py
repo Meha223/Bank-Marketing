@@ -224,4 +224,4 @@ elif page == "GenAI Assistant":
         elif "subscription by education" in natural_query:
             return "SELECT education, COUNT(*) AS total, SUM(CASE WHEN subscribed THEN 1 ELSE 0 END) AS subscribed FROM data GROUP BY education"
         else:
-            return "SELECT * FROM data LIMIT*
+            return "SELECT * FROM data LIMIT*"
