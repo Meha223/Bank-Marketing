@@ -68,6 +68,7 @@ if page == "Exploratory Data Analysis":
     # 5. Subscription by Education
     st.subheader("Subscription Rate by Education Level")
     edu_group = data.groupby('education')['subscribed'].value_counts(normalize=True).unstack().fillna(0)
+
     if 'yes' in edu_group.columns:
         edu_subs = edu_group['yes'].reset_index().rename(columns={'yes': "Subscription Rate (%)"})
         edu_subs["Subscription Rate (%)"] *= 100
