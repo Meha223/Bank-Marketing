@@ -62,20 +62,25 @@ if page == "Exploratory Data Analysis":
     month_count.columns = ['Month', 'Count']
     fig = px.bar(month_count, x='Month', y='Count', title="Contact Month Distribution")
     st.plotly_chart(fig)
-
-    data['subscribed'] = data['subscribed'].astype(str).str.lower().str.strip()
     
     # 5. Subscription by Education
     st.subheader("Subscription Rate by Education Level")
-    edu_group = data.groupby('education')['subscribed'].value_counts(normalize=True).unstack().fillna(0)
 
-    if 'True' in edu_group.columns:
-        edu_subs = edu_group['True'].reset_index().rename(columns={'True': "Subscription Rate (%)"})
-        edu_subs["Subscription Rate (%)"] *= 100
-        fig = px.bar(edu_subs, x='education', y='Subscription Rate (%)', title="Subscription Rate by Education Level")
-        st.plotly_chart(fig)
-    else:
-        st.warning("No 'yes' values found in 'subscribed' column for education level.")
+    # Ensure 'subscribed' is boolean (if not already)
+    data['subscribed'] = data['subscribed'].astype(bool)
+
+    # Group and calculate subscription rate
+    edu_group = data.groupby('education')['subscribed'].mean().reset_index()
+    edu_group["Subscription Rate (%)"] = edu_group["subscribed"] * 100
+
+    # Plot the results
+    fig = px.bar(
+        edu_group,
+        x='education',
+        y='Subscription Rate (%)',
+        title="Subscription Rate by Education Level"
+    )
+    st.plotly_chart(fig)
 
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
