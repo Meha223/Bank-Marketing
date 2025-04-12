@@ -56,7 +56,7 @@ if page == "Exploratory Data Analysis":
     fig = px.box(data, x='duration_length', y='subscribed', title="Contact Duration vs Subscription Outcome")
     st.plotly_chart(fig)
 
-    $ 4. Contact Month Distribution
+    # 4. Contact Month Distribution
     st.subheader("Contact Month Distribution")
     month_count = data['month'].value_counts().sort_index().reset_index()
     month_count.columns = ['Month', 'Count']
