@@ -8,10 +8,10 @@ import pyarrow.parquet as pq
 # --- Load and Join Data ---
 @st.cache_data
 def load_data():
-    fact = pd.read_parquet("bankmarketing/marketing.parquet")
-    client = pd.read_parquet("bankmarketing/client.parquet")
-    contact = pd.read_parquet("bankmarketing/contact.parquet")
-    campaign = pd.read_parquet("bankmarketing/campaign.parquet")
+    fact = pd.read_parquet("marketing.parquet")
+    client = pd.read_parquet("client.parquet")
+    contact = pd.read_parquet("contact.parquet")
+    campaign = pd.read_parquet("campaign.parquet")
     
     # Join all tables into one dataframe
     df = (
