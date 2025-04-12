@@ -65,7 +65,7 @@ Campaign dimension table with marketing campaign-related data.
 | previous      | INT       | Number of previous campaigns                             |
 | poutcome      | STRING    | Outcome of the previous campaign                         |
 
-### 5. **fact_campaign_results**
+### 5. **marketing**
 Fact table that consolidates data from dimension tables and indicates subscription status.
 
 | Column          | Data Type | Description                                              |
@@ -79,6 +79,6 @@ Fact table that consolidates data from dimension tables and indicates subscripti
 ## Relationships
 
 - **bank_base** table serves as the base for all other tables, providing a unique `fact_id` for each row.
-- The **client**, **contact**, and **campaign** tables are dimension tables that link to the **fact_campaign_results** table.
-- The **fact_campaign_results** table stores the relationships between clients, their contact details, and the campaigns they are associated with.
+- The **client**, **contact**, and **campaign** tables are dimension tables that link to the **marketing** table.
+- The **marketing** table stores the relationships between clients, their contact details, and the campaigns they are associated with.
 
