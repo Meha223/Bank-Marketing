@@ -242,7 +242,7 @@ elif page == "GenAI Assistant":
         execute_button = st.button("Execute Query")
 
         if execute_button:
-            result_data = execute_sql(sql_query)
+            result_data = execute_sql(sql_query, data)
             st.subheader("Query Result Preview")
             st.dataframe(result_data.head())
 
