@@ -82,6 +82,25 @@ if page == "Exploratory Data Analysis":
     )
     st.plotly_chart(fig)
 
+    # 6. Subscription Rate by Age Group
+    st.subheader("Subscription Rate by Age Group")
+
+    # Ensure 'subscribed' is boolean
+    data['subscribed'] = data['subscribed'].astype(bool)
+
+    # Calculate mean (i.e., subscription rate) by age group
+    age_group = data.groupby('age_group')['subscribed'].mean().reset_index()
+    age_group["Subscription Rate (%)"] = age_group["subscribed"] * 100
+
+    # Plot
+    fig = px.bar(
+        age_group,
+        x='age_group',
+        y='Subscription Rate (%)',
+        title="Subscription Rate by Age Group"
+    )
+    st.plotly_chart(fig)
+    
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
     filtered_data = data[data['age_group'] == age_group_filter]
