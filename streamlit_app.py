@@ -135,36 +135,36 @@ if page == "Exploratory Data Analysis":
     st.write(filtered_data)
 
     st.subheader("Key Insights")
-st.markdown("""
-- **Age Group Distribution**: 
-  - The distribution of clients across different age groups is visualized. This can give an idea of which age groups are the most or least represented in the data.
-  - This information is essential for understanding demographic trends and targeting specific age groups for campaigns.
+    st.markdown("""
+    - **Age Group Distribution**: 
+      - The distribution of clients across different age groups is visualized. This can give an idea of which age groups are the most or least represented in the data.
+      - This information is essential for understanding demographic trends and targeting specific age groups for campaigns.
 
-- **Campaign Subscription Distribution**:
-  - This pie chart illustrates the proportion of people who subscribed to the campaign versus those who didn't. 
-  - It provides a quick overview of campaign performance, showing how effective the campaign has been in driving subscriptions.
+    - **Campaign Subscription Distribution**:
+      - This pie chart illustrates the proportion of people who subscribed to the campaign versus those who didn't. 
+      - It provides a quick overview of campaign performance, showing how effective the campaign has been in driving subscriptions.
 
-- **Contact Duration vs Outcome**:
-  - The box plot shows the relationship between the contact duration and the subscription outcome (whether the person subscribed or not). 
-  - It can provide insights into whether longer contact durations lead to higher subscription rates or whether the outcome is independent of duration.
-  - It may also highlight outliers in contact durations that resulted in different outcomes.
+    - **Contact Duration vs Outcome**:
+      - The box plot shows the relationship between the contact duration and the subscription outcome (whether the person subscribed or not). 
+      - It can provide insights into whether longer contact durations lead to higher subscription rates or whether the outcome is independent of duration.
+      - It may also highlight outliers in contact durations that resulted in different outcomes.
 
-- **Contact Month Distribution**:
-  - This bar chart visualizes the distribution of contacts across different months. It helps identify seasonal trends or periods with higher or lower campaign activity or customer engagement.
-  - It can be used to assess which months are most active for campaigns and where improvements may be needed.
+    - **Contact Month Distribution**:
+      - This bar chart visualizes the distribution of contacts across different months. It helps identify seasonal trends or periods with higher or lower campaign activity or customer engagement.
+      - It can be used to assess which months are most active for campaigns and where improvements may be needed.
 
-- **Subscription Rate by Education Level**:
-  - This bar chart provides the subscription rate by education level. It can be used to assess whether certain education levels are more likely to subscribe to the campaign.
-  - Understanding subscription trends by education level could help with targeted marketing efforts for specific educational demographics.
+    - **Subscription Rate by Education Level**:
+      - This bar chart provides the subscription rate by education level. It can be used to assess whether certain education levels are more likely to subscribe to the campaign.
+      - Understanding subscription trends by education level could help with targeted marketing efforts for specific educational demographics.
 
-- **Subscription Rate by Age Group**:
-  - The pie chart shows the subscription rate by age group, indicating which age groups are more likely to subscribe to the campaign. 
-  - This could help in tailoring future campaigns toward age groups with higher or lower subscription rates.
+    - **Subscription Rate by Age Group**:
+      - The pie chart shows the subscription rate by age group, indicating which age groups are more likely to subscribe to the campaign. 
+      - This could help in tailoring future campaigns toward age groups with higher or lower subscription rates.
 
-- **Subscription Rate by Job**:
-  - The bar chart shows the subscription rate by job type. This can help identify which job categories are more inclined to subscribe to the campaign. 
-  - Understanding this information can be helpful for refining future campaigns, targeting specific professional groups for higher engagement.
-""")
+    - **Subscription Rate by Job**:
+      - The bar chart shows the subscription rate by job type. This can help identify which job categories are more inclined to subscribe to the campaign. 
+      - Understanding this information can be helpful for refining future campaigns, targeting specific professional groups for higher engagement.
+    """)
 
 # --- Page 2: SQL Query Interface ---
 elif page == "SQL Query Interface":
