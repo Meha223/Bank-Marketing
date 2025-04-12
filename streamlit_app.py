@@ -69,8 +69,8 @@ if page == "Exploratory Data Analysis":
     st.subheader("Subscription Rate by Education Level")
     edu_group = data.groupby('education')['subscribed'].value_counts(normalize=True).unstack().fillna(0)
 
-    if 'true' in edu_group.columns:
-        edu_subs = edu_group['true'].reset_index().rename(columns={'true': "Subscription Rate (%)"})
+    if 'True' in edu_group.columns:
+        edu_subs = edu_group['True'].reset_index().rename(columns={'True': "Subscription Rate (%)"})
         edu_subs["Subscription Rate (%)"] *= 100
         fig = px.bar(edu_subs, x='education', y='Subscription Rate (%)', title="Subscription Rate by Education Level")
         st.plotly_chart(fig)
