@@ -25,7 +25,7 @@ data = load_data()
 
 # Sidebar for navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Select a Page", ["Exploratory Data Analysis", "SQL Query Interface"])
+page = st.sidebar.radio("Select a Page", ["Exploratory Data Analysis", "SQL Query Interface", "GenAI Assistant"])
 
 # --- Page 1: Exploratory Data Analysis ---
 if page == "Exploratory Data Analysis":
