@@ -140,14 +140,24 @@ if page == "Exploratory Data Analysis":
         'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12
     }
 
-    # Convert 'month' to numeric using the mapping
+    # Convert 'month' to lowercase and map it to numbers, handle any errors
     data['month'] = data['month'].str.lower().map(month_mapping)
+
+    # Check if any rows have invalid months
+    invalid_months = data[data['month'].isna()]
+    if not invalid_months.empty:
+        st.warning(f"Invalid months found: {invalid_months['month'].unique()}")
+
+    # Drop rows with invalid months (optional, depending on your data)
+    data = data.dropna(subset=['month'])
 
     # Group by month and calculate the subscription rate
     month_group = data.groupby('month')['subscribed'].mean().reset_index()
+
+    # Calculate subscription rate percentage
     month_group["Subscription Rate (%)"] = month_group["subscribed"] * 100
 
-    # Pie Chart
+    # Create a pie chart for subscription rate by month
     fig = px.pie(
         month_group,
         names='month',
