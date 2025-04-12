@@ -88,16 +88,16 @@ if page == "Exploratory Data Analysis":
     # Ensure 'subscribed' is boolean
     data['subscribed'] = data['subscribed'].astype(bool)
 
-    # Calculate mean (i.e., subscription rate) by age group
+    # Calculate subscription rate
     age_group = data.groupby('age_group')['subscribed'].mean().reset_index()
     age_group["Subscription Rate (%)"] = age_group["subscribed"] * 100
 
-    # Plot
-    fig = px.bar(
+    # Pie Chart
+    fig = px.pie(
         age_group,
-        x='age_group',
-        y='Subscription Rate (%)',
-        title="Subscription Rate by Age Group"
+        names='age_group',
+        values='Subscription Rate (%)',
+        title='Subscription Rate by Age Group'
     )
     st.plotly_chart(fig)
     
