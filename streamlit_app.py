@@ -166,45 +166,8 @@ if page == "Exploratory Data Analysis":
       - Understanding this information can be helpful for refining future campaigns, targeting specific professional groups for higher engagement.
     """)
 
-# --- Page 2: SQL Query Interface ---    
-# --- Convert Natural Language to SQL (basic simulation) ---
-def prompt_to_sql(prompt):
-     prompt = prompt.lower()
-
-    if "campaign" in prompt and "age group" in prompt:
-        return "SELECT * FROM data WHERE age_group = '30-40'"
-
-      elif "show all data" in prompt or "all records" in prompt:
-        return "SELECT * FROM data"
-
-      elif "subscribed customers" in prompt:
-        return "SELECT * FROM data WHERE subscribed = 1"
-
-     elif "subscription rate by education" in prompt:
-          return "SELECT education, AVG(subscribed) * 100 AS subscription_rate FROM data GROUP BY education"
-
-      else:
-          return "SELECT * FROM data LIMIT 10"
-            
-    elif page == "SQL Query Interface":
-
-    # --- Page 3: Natural Language SQL Interface ---
-    elif page == "Natural Language SQL":
-        st.title("Natural Language SQL Exploration")
-
-        user_prompt = st.text_input("Ask a question about the data:", "")
-
-        if user_prompt:
-            sql_query = prompt_to_sql(user_prompt)
-            st.code(sql_query, language="sql")
-
-            result = execute_sql(sql_query)
-
-            if result.empty:
-                st.warning("No results returned for this query.")
-            else:
-                st.dataframe(result)
-
+# --- Page 2: SQL Query Interface ---           
+elif page == "SQL Query Interface":
      st.title("Data Query Interface")
 
     # Text box to enter SQL query
@@ -240,25 +203,41 @@ def prompt_to_sql(prompt):
         )
 
 # --- Page 3: GenAI Assistant (Text-to-SQL Generator) ---
-elif page == "GenAI Assistant":
-    st.title("GenAI: Text-to-SQL Generator")
+elif page == "Natural Language SQL":
+    st.title("Natural Language SQL Query Generator")
 
-    st.markdown("""
-    Type a natural language question, and I will try to generate the SQL query for you and run it on the dataset.
-    """)
+    # Input area for natural language query
+    nl_query = st.text_area("Enter your natural language query", height=200, placeholder="e.g., Show me the average subscription rate by age group.")
 
-    user_question = st.text_input("Ask a question (e.g., 'Show all clients over age 50')")
+    if nl_query:
+        # Simple function to convert natural language to SQL (basic example)
+        # For more complex implementation, this would involve AI/ML models for NLP-to-SQL
+        def nl_to_sql(nl_query):
+            if "average subscription rate by age group" in nl_query.lower():
+                return "SELECT age_group, AVG(subscribed) AS avg_subscription_rate FROM data GROUP BY age_group"
+            elif "total subscriptions" in nl_query.lower():
+                return "SELECT COUNT(*) AS total_subscriptions FROM data WHERE subscribed = 1"
+            else:
+                return "SELECT * FROM data LIMIT 10;"  # Default query for unknown input
 
-    # Basic text-to-SQL logic (mocked)
-    def generate_sql(natural_query):
-        natural_query = natural_query.lower()
-        if "clients over age" in natural_query:
-            return "SELECT * FROM data WHERE age > 50"
-        elif "subscription rate by job" in natural_query:
-            return "SELECT job, AVG(CASE WHEN subscribed THEN 1 ELSE 0 END) * 100 AS subscription_rate FROM data GROUP BY job"
-        elif "how many subscribed" in natural_query:
-            return "SELECT COUNT(*) AS total_subscribed FROM data WHERE subscribed = 1"
-        elif "subscription by education" in natural_query:
-            return "SELECT education, COUNT(*) AS total, SUM(CASE WHEN subscribed THEN 1 ELSE 0 END) AS subscribed FROM data GROUP BY education"
-        else:
-            return "SELECT * FROM data LIMIT*"
+        # Convert NL query to SQL
+        sql_query = nl_to_sql(nl_query)
+        st.subheader("Generated SQL Query")
+        st.code(sql_query, language='sql')
+
+        # Option to execute generated SQL query
+        execute_button = st.button("Execute Query")
+
+        if execute_button:
+            result_data = execute_sql(sql_query)
+            st.subheader("Query Result Preview")
+            st.dataframe(result_data.head())
+
+            # Option to export data as CSV
+            csv_data = result_data.to_csv(index=False)
+            st.download_button(
+                label="Download CSV",
+                data=csv_data,
+                file_name="query_result_from_nl.csv",
+                mime="text/csv"
+            )
