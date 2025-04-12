@@ -57,16 +57,24 @@ if page == "Exploratory Data Analysis":
     st.plotly_chart(fig)
 
     # 4: Subscription Rate by Job
-    st.subheader("Subscription Rate by Job")
-    job_group = data.groupby('job')['subscribed'].value_counts(normalize=True).unstack().fillna(0) * 100
-    if 'yes' in job_group.columns:
-        job_group_sorted = job_group.sort_values(by='yes', ascending=False).reset_index()
-        fig = px.bar(job_group_sorted, x='job', y='yes',
-                     labels={'yes': 'Subscription Rate (%)', 'job': 'Job'},
-                     title="Subscription Rate (%) by Job")
-        st.plotly_chart(fig)
-    else:
-        st.warning("No 'yes' values found in 'subscribed' column to compute rates.")
+    # Check values in 'subscribed'
+if data['subscribed'].dtype == 'int' or set(data['subscribed'].unique()) <= {0, 1}:
+    # Assuming binary 0/1
+    data['subscribed_label'] = data['subscribed'].map({1: 'Subscribed', 0: 'Not Subscribed'})
+else:
+    # Assuming it's already 'yes'/'no' or similar
+    data['subscribed_label'] = data['subscribed'].astype(str).str.capitalize()
+
+subscription_by_job = data.groupby(['job', 'subscribed_label']).size().reset_index(name='Count')
+fig = px.bar(
+    subscription_by_job,
+    x='job',
+    y='Count',
+    color='subscribed_label',
+    title="Subscription Rate by Job",
+    labels={'subscribed_label': 'Subscription Status'}
+)
+st.plotly_chart(fig)
 
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
