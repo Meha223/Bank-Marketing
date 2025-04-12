@@ -63,12 +63,12 @@ if page == "Exploratory Data Analysis":
     fig = px.box(data, x='duration_length', y='subscribed', title="Contact Duration vs Subscription Outcome")
     st.plotly_chart(fig)
 
-    # 4: Subscription Rate by Job
-    st.subheader("💼 Subscription Rate by Job")
-    job_subs = data.groupby(['job', 'subscribed_label']).size().reset_index(name='Count')
-    fig = px.bar(job_subs, x='job', y='Count', color='subscribed_label',
-                 title="Subscription Rate by Job", labels={'subscribed_label': 'Subscription'})
-    fig.update_layout(xaxis_tickangle=-45)
+    # 4: Subscription by Age Group
+    st.subheader("👶🧓 Subscription Distribution by Age Group")
+    age_subs = data.groupby(['age_group', 'subscribed_label']).size().reset_index(name='Count')
+    fig = px.bar(age_subs, x='age_group', y='Count', color='subscribed_label',
+             title="Subscription Distribution by Age Group",
+             labels={'subscribed_label': 'Subscription', 'age_group': 'Age Group'})
     st.plotly_chart(fig)
 
     # Filters to dynamically update the data
