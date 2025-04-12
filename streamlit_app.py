@@ -203,7 +203,7 @@ elif page == "SQL Query Interface":
         )
 
 # --- Page 3: GenAI Assistant (Text-to-SQL Generator) ---
-elif page == "Natural Language SQL":
+elif page == "GenAI Assistant":
     st.title("Natural Language SQL Query Generator")
 
     # Input area for natural language query
