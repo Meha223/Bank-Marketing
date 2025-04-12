@@ -58,7 +58,7 @@ if page == "Exploratory Data Analysis":
 
     $ 4. Contact Month Distribution
     st.subheader("Contact Month Distribution")
-    month_count = data['contact_month'].value_counts().sort_index().reset_index()
+    month_count = data['month'].value_counts().sort_index().reset_index()
     month_count.columns = ['Month', 'Count']
     fig = px.bar(month_count, x='Month', y='Count', title="Contact Month Distribution")
     st.plotly_chart(fig)
