@@ -58,10 +58,15 @@ if page == "Exploratory Data Analysis":
 
     # 4: Subscription Rate by Job
     st.subheader("Subscription Rate by Job")
-    job_subs = data.groupby('job')['subscribed'].value_counts(normalize=True).unstack().fillna(0)
-    job_subs = (job_subs[1] * 100).reset_index().rename(columns={1: "Subscription Rate (%)"})
-    fig = px.bar(job_subs, x='job', y='Subscription Rate (%)', title="Subscription Rate by Job")
-    st.plotly_chart(fig)
+    job_group = data.groupby('job')['subscribed'].value_counts(normalize=True).unstack().fillna(0) * 100
+    if 'yes' in job_group.columns:
+        job_group_sorted = job_group.sort_values(by='yes', ascending=False).reset_index()
+        fig = px.bar(job_group_sorted, x='job', y='yes',
+                     labels={'yes': 'Subscription Rate (%)', 'job': 'Job'},
+                     title="Subscription Rate (%) by Job")
+        st.plotly_chart(fig)
+    else:
+        st.warning("No 'yes' values found in 'subscribed' column to compute rates.")
 
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
