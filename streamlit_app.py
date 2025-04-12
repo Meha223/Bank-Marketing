@@ -21,6 +21,20 @@ def load_data():
     )
     return df
 
+# --- SQL Execution Function ---
+@st.cache_data
+def execute_sql(query, data):
+    try:
+        # Using SQLite to run queries on the dataframe
+        con = sqlite3.connect(":memory:")  # SQLite in-memory database
+        data.to_sql('data', con, index=False, if_exists='replace')
+        result = pd.read_sql(query, con)
+        con.close()
+        return result
+    except Exception as e:
+        st.error(f"Error: {e}")
+        return pd.DataFrame()
+        
 data = load_data()
 
 # Sidebar for navigation
@@ -211,7 +225,6 @@ elif page == "GenAI Assistant":
 
     if nl_query:
         # Simple function to convert natural language to SQL (basic example)
-        # For more complex implementation, this would involve AI/ML models for NLP-to-SQL
         def nl_to_sql(nl_query):
             if "average subscription rate by age group" in nl_query.lower():
                 return "SELECT age_group, AVG(subscribed) AS avg_subscription_rate FROM data GROUP BY age_group"
