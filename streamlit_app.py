@@ -72,7 +72,7 @@ if page == "Exploratory Data Analysis":
         fig = px.bar(edu_subs, x='education', y='Subscription Rate (%)', title="Subscription Rate by Education Level")
         st.plotly_chart(fig)
     else:
-    st.warning("No 'yes' values found in 'subscribed' column for education level.")
+        st.warning("No 'yes' values found in 'subscribed' column for education level.")
 
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
