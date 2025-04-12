@@ -76,6 +76,10 @@ Fact table that consolidates data from dimension tables and indicates subscripti
 | campaign_id     | INT       | Foreign key, references `campaign.campaign_id`           |
 | subscribed      | STRING    | Indicates if the customer subscribed to the deposit      |
 
+# Synthetic Features
+
+- age_group in client table: Range of ages
+- duration_length in contact table: Categorizes duration into qualitative labels.
 ## Relationships
 
 - **bank_base** table serves as the base for all other tables, providing a unique `fact_id` for each row.
