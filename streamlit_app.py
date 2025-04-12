@@ -132,7 +132,7 @@ if page == "Exploratory Data Analysis":
     st.subheader("Subscription Rate by Month")
 
     # Make sure the date column is in datetime format
-    data['month'] = pd.to_datetime(data['contact_date']).dt.to_period('M').astype(str)
+    data['month'] = pd.to_datetime(data['month']).dt.to_period('M').astype(str)
 
     # Group by month and calculate subscription rate
     month_group = data.groupby('month')['subscribed'].mean().reset_index()
