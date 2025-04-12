@@ -53,7 +53,13 @@ if page == "Exploratory Data Analysis":
     st.plotly_chart(fig)
 
     # 3. Contact Duration vs Outcome
-    fig = px.box(data, x='duration_length', y='subscribed', title="Contact Duration vs Subscription Outcome")
+    fig = px.box(
+        data, 
+        x='subscribed', 
+        y='duration_length', 
+        title="Contact Duration vs Subscription Outcome",
+        labels={'subscribed': 'Subscribed', 'duration_length': 'Contact Duration'}
+    )
     st.plotly_chart(fig)
 
     # 4. Contact Month Distribution
