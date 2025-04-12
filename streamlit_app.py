@@ -64,11 +64,28 @@ if page == "Exploratory Data Analysis":
     st.plotly_chart(fig)
 
     # 4: Subscription by Age Group
-    st.subheader("👶🧓 Subscription Distribution by Age Group")
+    st.subheader("Subscription Distribution by Age Group")
+
+    # Ensure consistent labels for subscription status
+    data['subscribed_label'] = data['subscribed'].map({1: 'Subscribed', 0: 'Not Subscribed'})
+
+    # Sort age_group if it's not ordered
+    age_order = sorted(data['age_group'].dropna().unique())  # Custom order if needed
     age_subs = data.groupby(['age_group', 'subscribed_label']).size().reset_index(name='Count')
-    fig = px.bar(age_subs, x='age_group', y='Count', color='subscribed_label',
-             title="Subscription Distribution by Age Group",
-             labels={'subscribed_label': 'Subscription', 'age_group': 'Age Group'})
+
+    # Cast age_group as categorical for sorting
+    age_subs['age_group'] = pd.Categorical(age_subs['age_group'], categories=age_order, ordered=True)
+
+    fig = px.bar(
+    age_subs,
+    x='age_group',
+    y='Count',
+    color='subscribed_label',
+    title="Subscription Distribution by Age Group",
+    labels={'subscribed_label': 'Subscription', 'age_group': 'Age Group'},
+    barmode='group'
+    )
+    fig.update_layout(xaxis_categoryorder='array', xaxis_categoryarray=age_order)
     st.plotly_chart(fig)
 
     # Filters to dynamically update the data
