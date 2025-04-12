@@ -65,10 +65,14 @@ if page == "Exploratory Data Analysis":
 
     # 5. Subscription by Education
     st.subheader("Subscription Rate by Education Level")
-    edu_subs = data.groupby('education')['subscribed'].value_counts(normalize=True).unstack().fillna(0)
-    edu_subs = (edu_subs[1] * 100).reset_index().rename(columns={1: "Subscription Rate (%)"})
-    fig = px.bar(edu_subs, x='education', y='Subscription Rate (%)', title="Subscription by Education")
-    st.plotly_chart(fig)
+    edu_group = data.groupby('education')['subscribed'].value_counts(normalize=True).unstack().fillna(0)
+    if 'yes' in edu_group.columns:
+        edu_subs = edu_group['yes'].reset_index().rename(columns={'yes': "Subscription Rate (%)"})
+        edu_subs["Subscription Rate (%)"] *= 100
+        fig = px.bar(edu_subs, x='education', y='Subscription Rate (%)', title="Subscription Rate by Education Level")
+        st.plotly_chart(fig)
+    else:
+    st.warning("No 'yes' values found in 'subscribed' column for education level.")
 
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
