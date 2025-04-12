@@ -134,21 +134,29 @@ if page == "Exploratory Data Analysis":
     # Ensure 'subscribed' is boolean
     data['subscribed'] = data['subscribed'].astype(bool)
 
-    # Group by month and calculate the subscription rate
-    if 'month' in data.columns:
-        month_group = data.groupby('month')['subscribed'].mean().reset_index()
-        month_group["Subscription Rate (%)"] = month_group["subscribed"] * 100
+    # Mapping month names to numbers
+    month_mapping = {
+        'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'may': 5, 'jun': 6,
+        'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12
+    }
 
-        # Pie Chart
-        fig = px.pie(
-            month_group,
-            names='month',
-            values='Subscription Rate (%)',
-            title='Subscription Rate by Month'
-        )
-        st.plotly_chart(fig)
-    else:
-        st.warning("The dataset does not contain a 'month' column.")
+    # Convert 'month' to numeric using the mapping
+    data['month'] = data['month'].str.lower().map(month_mapping)
+
+    # Group by month and calculate the subscription rate
+    month_group = data.groupby('month')['subscribed'].mean().reset_index()
+    month_group["Subscription Rate (%)"] = month_group["subscribed"] * 100
+
+    # Pie Chart
+    fig = px.pie(
+        month_group,
+        names='month',
+        values='Subscription Rate (%)',
+        title='Subscription Rate by Month'
+    )
+
+    # Show the plot
+    st.plotly_chart(fig)
     
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
