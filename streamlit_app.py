@@ -56,6 +56,13 @@ if page == "Exploratory Data Analysis":
     fig = px.box(data, x='duration_length', y='subscribed', title="Contact Duration vs Subscription Outcome")
     st.plotly_chart(fig)
 
+    # 4: Subscription Rate by Job
+    st.subheader("Subscription Rate by Job")
+    job_subs = data.groupby('job')['subscribed'].value_counts(normalize=True).unstack().fillna(0)
+    job_subs = (job_subs[1] * 100).reset_index().rename(columns={1: "Subscription Rate (%)"})
+    fig = px.bar(job_subs, x='job', y='Subscription Rate (%)', title="Subscription Rate by Job")
+    st.plotly_chart(fig)
+
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
     filtered_data = data[data['age_group'] == age_group_filter]
