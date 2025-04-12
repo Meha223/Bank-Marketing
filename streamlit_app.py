@@ -134,28 +134,15 @@ if page == "Exploratory Data Analysis":
     # Ensure 'subscribed' is boolean
     data['subscribed'] = data['subscribed'].astype(bool)
 
-    # Mapping month names to numbers
-    month_mapping = {
-        'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'may': 5, 'jun': 6,
-        'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12
-    }
-
-    # Convert 'month' to lowercase and map it to numbers, handle any errors
-    data['month'] = data['month'].str.lower().map(month_mapping)
-
-    # Check if any rows have invalid months
-    invalid_months = data[data['month'].isna()]
-    if not invalid_months.empty:
-        st.warning(f"Invalid months found: {invalid_months['month'].unique()}")
-
-    # Drop rows with invalid months (optional, depending on your data)
-    data = data.dropna(subset=['month'])
-
-    # Group by month and calculate the subscription rate
+    # Group by month and calculate subscription rate (mean of 'subscribed' column)
     month_group = data.groupby('month')['subscribed'].mean().reset_index()
 
-    # Calculate subscription rate percentage
+    # Calculate subscription rate as percentage
     month_group["Subscription Rate (%)"] = month_group["subscribed"] * 100
+
+    # Ensure the month values are ordered correctly in the pie chart
+    month_group['month'] = pd.Categorical(month_group['month'], categories=[
+        'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'], ordered=True)
 
     # Create a pie chart for subscription rate by month
     fig = px.pie(
