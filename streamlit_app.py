@@ -202,3 +202,26 @@ elif page == "SQL Query Interface":
             mime="text/csv"
         )
 
+# --- Page 3: GenAI Assistant (Text-to-SQL Generator) ---
+elif page == "GenAI Assistant":
+    st.title("GenAI: Text-to-SQL Generator")
+
+    st.markdown("""
+    Type a natural language question, and I will try to generate the SQL query for you and run it on the dataset.
+    """)
+
+    user_question = st.text_input("Ask a question (e.g., 'Show all clients over age 50')")
+
+    # Basic text-to-SQL logic (mocked)
+    def generate_sql(natural_query):
+        natural_query = natural_query.lower()
+        if "clients over age" in natural_query:
+            return "SELECT * FROM data WHERE age > 50"
+        elif "subscription rate by job" in natural_query:
+            return "SELECT job, AVG(CASE WHEN subscribed THEN 1 ELSE 0 END) * 100 AS subscription_rate FROM data GROUP BY job"
+        elif "how many subscribed" in natural_query:
+            return "SELECT COUNT(*) AS total_subscribed FROM data WHERE subscribed = 1"
+        elif "subscription by education" in natural_query:
+            return "SELECT education, COUNT(*) AS total, SUM(CASE WHEN subscribed THEN 1 ELSE 0 END) AS subscribed FROM data GROUP BY education"
+        else:
+            return "SELECT * FROM data LIMIT*
