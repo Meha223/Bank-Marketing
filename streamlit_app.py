@@ -166,9 +166,46 @@ if page == "Exploratory Data Analysis":
       - Understanding this information can be helpful for refining future campaigns, targeting specific professional groups for higher engagement.
     """)
 
-# --- Page 2: SQL Query Interface ---
-elif page == "SQL Query Interface":
-    st.title("Data Query Interface")
+# --- Page 2: SQL Query Interface ---    
+# --- Convert Natural Language to SQL (basic simulation) ---
+def prompt_to_sql(prompt):
+     prompt = prompt.lower()
+
+    if "campaign" in prompt and "age group" in prompt:
+        return "SELECT * FROM data WHERE age_group = '30-40'"
+
+      elif "show all data" in prompt or "all records" in prompt:
+        return "SELECT * FROM data"
+
+      elif "subscribed customers" in prompt:
+        return "SELECT * FROM data WHERE subscribed = 1"
+
+     elif "subscription rate by education" in prompt:
+          return "SELECT education, AVG(subscribed) * 100 AS subscription_rate FROM data GROUP BY education"
+
+      else:
+          return "SELECT * FROM data LIMIT 10"
+            
+    elif page == "SQL Query Interface":
+
+    # --- Page 3: Natural Language SQL Interface ---
+    elif page == "Natural Language SQL":
+        st.title("Natural Language SQL Exploration")
+
+        user_prompt = st.text_input("Ask a question about the data:", "")
+
+        if user_prompt:
+            sql_query = prompt_to_sql(user_prompt)
+            st.code(sql_query, language="sql")
+
+            result = execute_sql(sql_query)
+
+            if result.empty:
+                st.warning("No results returned for this query.")
+            else:
+                st.dataframe(result)
+
+     st.title("Data Query Interface")
 
     # Text box to enter SQL query
     query = st.text_area("Enter SQL Query", value="SELECT * FROM data LIMIT 10;", height=200)
