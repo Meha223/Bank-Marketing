@@ -5,11 +5,21 @@ import sqlite3
 from io import StringIO
 import pyarrow.parquet as pq
 
-# Load data from Parquet
-@st.cache
+# --- Load and Join Data ---
+@st.cache_data
 def load_data():
-    data = pq.read_table("marketing.parquet").to_pandas()
-    return data
+    fact = pd.read_parquet("bankmarketing/marketing.parquet")
+    client = pd.read_parquet("bankmarketing/client.parquet")
+    contact = pd.read_parquet("bankmarketing/contact.parquet")
+    campaign = pd.read_parquet("bankmarketing/campaign.parquet")
+    
+    # Join all tables into one dataframe
+    df = (
+        fact.merge(client, on="client_id", how="left")
+            .merge(contact, on="contact_id", how="left")
+            .merge(campaign, on="campaign_id", how="left")
+    )
+    return df
 
 data = load_data()
 
