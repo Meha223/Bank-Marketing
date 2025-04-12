@@ -174,11 +174,11 @@ elif page == "SQL Query Interface":
     query = st.text_area("Enter SQL Query", value="SELECT * FROM data LIMIT 10;", height=200)
 
     # Execute the SQL query
-    @st.cache
+    @st.cache_data
     def execute_sql(query):
         try:
             # Using SQLite to run queries on the dataframe
-            con = sqlite3.connect(":memory:")
+            con = sqlite3.connect(":memory:")  # SQLite in-memory database
             data.to_sql('data', con, index=False, if_exists='replace')
             result = pd.read_sql(query, con)
             con.close()
@@ -201,3 +201,4 @@ elif page == "SQL Query Interface":
             file_name="query_result.csv",
             mime="text/csv"
         )
+
