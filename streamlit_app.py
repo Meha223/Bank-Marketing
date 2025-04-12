@@ -19,13 +19,6 @@ def load_data():
             .merge(contact, on="fact_id", how="left")
             .merge(campaign, on="fact_id", how="left")
     )
-    
-    # Standardize 'subscribed' labels
-    if df['subscribed'].dtype == 'int' or set(df['subscribed'].unique()) <= {0, 1}:
-        df['subscribed_label'] = df['subscribed'].map({1: 'Subscribed', 0: 'Not Subscribed'})
-    else:
-        df['subscribed_label'] = df['subscribed'].astype(str).str.capitalize()
-    
     return df
 
 data = load_data()
@@ -62,41 +55,6 @@ if page == "Exploratory Data Analysis":
     # 3. Contact Duration vs Outcome
     fig = px.box(data, x='duration_length', y='subscribed', title="Contact Duration vs Subscription Outcome")
     st.plotly_chart(fig)
-
-    # 4: Subscription by Age Group
-    st.subheader("Subscription Distribution by Age Group")
-
-    # Check unique values to debug first
-    st.write("🔍 Available age_group values:", data['age_group'].unique())
-    st.write("🔍 Sample data for age_group and subscribed:")
-    st.dataframe(data[['age_group', 'subscribed']].dropna().head())
-
-    # Only proceed if there's data
-    if not data['age_group'].dropna().empty:
-    # Map subscription labels
-    data['subscribed_label'] = data['subscribed'].map({1: 'Subscribed', 0: 'Not Subscribed'})
-
-    # Group and count
-    age_subs = data.groupby(['age_group', 'subscribed_label']).size().reset_index(name='Count')
-
-    # Handle sorting if needed
-    age_subs['age_group'] = age_subs['age_group'].astype(str)
-    age_order = sorted(age_subs['age_group'].unique())
-    age_subs['age_group'] = pd.Categorical(age_subs['age_group'], categories=age_order, ordered=True)
-
-    # Plot
-    fig = px.bar(
-        age_subs,
-        x='age_group',
-        y='Count',
-        color='subscribed_label',
-        title="Subscription Distribution by Age Group",
-        labels={'age_group': 'Age Group', 'Count': 'Number of Clients', 'subscribed_label': 'Subscription'},
-        barmode='group'
-    )
-    st.plotly_chart(fig)
-    else:
-    st.warning("⚠️ No valid data found in 'age_group'. Please check your dataset.")
 
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
