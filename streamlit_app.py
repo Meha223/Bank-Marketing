@@ -168,7 +168,7 @@ if page == "Exploratory Data Analysis":
 
 # --- Page 2: SQL Query Interface ---           
 elif page == "SQL Query Interface":
-     st.title("Data Query Interface")
+    st.title("Data Query Interface")
 
     # Text box to enter SQL query
     query = st.text_area("Enter SQL Query", value="SELECT * FROM data LIMIT 10;", height=200)
