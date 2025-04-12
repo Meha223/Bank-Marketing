@@ -1,0 +1,66 @@
+
+erDiagram
+    bank_base {
+        int fact_id PK
+        int age
+        string job
+        string marital
+        string education
+        string default
+        string housing
+        string loan
+        string contact
+        string month
+        int day
+        int duration
+        int campaign
+        int pdays
+        int previous
+        string poutcome
+        string deposit
+    }
+
+    client {
+        int client_id PK
+        int fact_id FK
+        int age
+        string job
+        string marital
+        string education
+        string credit_default
+        string housing
+        string loan
+    }
+
+    contact {
+        int contact_id PK
+        int fact_id FK
+        string contact
+        string month
+        int day
+        int duration
+    }
+
+    campaign {
+        int campaign_id PK
+        int fact_id FK
+        int campaign
+        int pdays
+        int previous
+        string poutcome
+    }
+
+    fact_campaign_results {
+        int fact_id PK
+        int client_id FK
+        int contact_id FK
+        int campaign_id FK
+        string subscribed
+    }
+
+    bank_base ||..|| client : "fact_id"
+    bank_base ||..|| contact : "fact_id"
+    bank_base ||..|| campaign : "fact_id"
+    fact_campaign_results ||--|| client : "client_id"
+    fact_campaign_results ||--|| contact : "contact_id"
+    fact_campaign_results ||--|| campaign : "campaign_id"
