@@ -100,6 +100,27 @@ if page == "Exploratory Data Analysis":
         title='Subscription Rate by Age Group'
     )
     st.plotly_chart(fig)
+
+    # 7. Subscription Rate by Job
+    st.subheader("Subscription Rate by Job (Bar Chart)")
+
+    # Ensure 'subscribed' is boolean
+    data['subscribed'] = data['subscribed'].astype(bool)
+
+    # Calculate subscription rate
+    job_group = data.groupby('job')['subscribed'].mean().reset_index()
+    job_group["Subscription Rate (%)"] = job_group["subscribed"] * 100
+
+    # Bar Chart
+    fig = px.bar(
+        job_group.sort_values("Subscription Rate (%)", ascending=True),
+        x='Subscription Rate (%)',
+        y='job',
+        orientation='h',
+        title='Subscription Rate by Job',
+        labels={'job': 'Job', 'Subscription Rate (%)': 'Subscription Rate (%)'}
+    )
+    st.plotly_chart(fig)
     
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
