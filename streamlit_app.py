@@ -131,19 +131,13 @@ if page == "Exploratory Data Analysis":
     # 8. Subscription Rate by Month
     st.subheader("Subscription Rate by Month")
 
-    # Make sure 'subscribed' is boolean
+    # Ensure 'subscribed' is boolean
     data['subscribed'] = data['subscribed'].astype(bool)
 
-    # Ensure contact_date exists and is datetime
+    # Group by month and calculate the subscription rate
     if 'month' in data.columns:
         month_group = data.groupby('month')['subscribed'].mean().reset_index()
         month_group["Subscription Rate (%)"] = month_group["subscribed"] * 100
-
-        # Sort months by calendar order
-        from calendar import month_name
-        month_order = list(month_name)[1:]  # Skip empty string at index 0
-        month_group['month'] = pd.Categorical(month_group['month'], categories=month_order, ordered=True)
-        month_group = month_group.sort_values('month')
 
         # Pie Chart
         fig = px.pie(
@@ -154,7 +148,7 @@ if page == "Exploratory Data Analysis":
         )
         st.plotly_chart(fig)
     else:
-        st.warning("The dataset does not contain a 'contact_date' column.")
+        st.warning("The dataset does not contain a 'month' column.")
     
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
