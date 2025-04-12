@@ -15,9 +15,9 @@ def load_data():
     
     # Join all tables into one dataframe
     df = (
-        fact.merge(client, on="client_id", how="left")
-            .merge(contact, on="contact_id", how="left")
-            .merge(campaign, on="campaign_id", how="left")
+        fact.merge(client, on="fact_id", how="left")
+            .merge(contact, on="fact_id", how="left")
+            .merge(campaign, on="fact_id", how="left")
     )
     return df
 
