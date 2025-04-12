@@ -1,4 +1,7 @@
-streamlit==1.18.1
-pandas==1.5.3
-plotly==5.13.1
-pyarrow==11.0.0
+streamlit
+pandas
+pyarrow>=10.0.1
+duckdb
+sqlalchemy
+altair
+plotly
