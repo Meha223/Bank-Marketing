@@ -134,15 +134,18 @@ if page == "Exploratory Data Analysis":
     # Ensure 'subscribed' is boolean
     data['subscribed'] = data['subscribed'].astype(bool)
 
-    # Group by month and calculate subscription rate (mean of 'subscribed' column)
+    # Make sure 'month' is treated as a categorical string, not a date
+    data['month'] = data['month'].astype(str)
+
+    # Group by month and calculate the subscription rate (mean of 'subscribed' column)
     month_group = data.groupby('month')['subscribed'].mean().reset_index()
 
     # Calculate subscription rate as percentage
     month_group["Subscription Rate (%)"] = month_group["subscribed"] * 100
 
-    # Ensure the month values are ordered correctly in the pie chart
-    month_group['month'] = pd.Categorical(month_group['month'], categories=[
-        'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'], ordered=True)
+    # Ensure the month values are ordered correctly in the pie chart (from jan to dec)
+    month_order = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+    month_group['month'] = pd.Categorical(month_group['month'], categories=month_order, ordered=True)
 
     # Create a pie chart for subscription rate by month
     fig = px.pie(
