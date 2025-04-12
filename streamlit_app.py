@@ -127,6 +127,26 @@ if page == "Exploratory Data Analysis":
         labels={'job': 'Job', 'Subscription Rate (%)': 'Subscription Rate (%)'}
     )
     st.plotly_chart(fig)
+
+    # 8. Subscription Rate by Month
+    st.subheader("Subscription Rate by Month")
+
+    # Make sure the date column is in datetime format
+    data['month'] = pd.to_datetime(data['contact_date']).dt.to_period('M').astype(str)
+
+    # Group by month and calculate subscription rate
+    month_group = data.groupby('month')['subscribed'].mean().reset_index()
+    month_group['Subscription Rate (%)'] = month_group['subscribed'] * 100
+
+    # Plot bar chart
+    fig = px.bar(
+        month_group,
+        x='month',
+        y='Subscription Rate (%)',
+        title="Subscription Rate by Month",
+        labels={'month': 'Month'}
+    )
+    st.plotly_chart(fig)
     
     # Filters to dynamically update the data
     age_group_filter = st.selectbox('Select Age Group:', data['age_group'].unique())
